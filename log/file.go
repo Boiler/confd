@@ -1,4 +1,4 @@
-package zapwriter
+package log
 
 import (
 	"fmt"

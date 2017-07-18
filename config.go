@@ -32,6 +32,7 @@ var (
 	interval          int
 	keepStageFile     bool
 	logLevel          string
+	logFile           string
 	nodes             Nodes
 	noop              bool
 	onetime           bool
@@ -73,6 +74,7 @@ type Config struct {
 	Table        string   `toml:"table"`
 	Username     string   `toml:"username"`
 	LogLevel     string   `toml:"log-level"`
+	LogFile      string   `toml:"log-file"`
 	Watch        bool     `toml:"watch"`
 	AppID        string   `toml:"app_id"`
 	UserID       string   `toml:"user_id"`
@@ -90,6 +92,7 @@ func init() {
 	flag.IntVar(&interval, "interval", 600, "backend polling interval")
 	flag.BoolVar(&keepStageFile, "keep-stage-file", false, "keep staged files")
 	flag.StringVar(&logLevel, "log-level", "", "level which confd should log messages")
+	flag.StringVar(&logFile, "log-file", "", "log filepath")
 	flag.Var(&nodes, "node", "list of backend nodes")
 	flag.BoolVar(&noop, "noop", false, "only show pending changes")
 	flag.BoolVar(&onetime, "onetime", false, "run once and exit")
@@ -150,6 +153,10 @@ func initConfig() error {
 
 	if config.LogLevel != "" {
 		log.SetLevel(config.LogLevel)
+	}
+
+	if config.LogFile != "" {
+		log.SetFilepath(config.LogFile)
 	}
 
 	if config.SRVDomain != "" && config.SRVRecord == "" {
@@ -314,6 +321,8 @@ func setConfigFromFlag(f *flag.Flag) {
 		config.Username = username
 	case "log-level":
 		config.LogLevel = logLevel
+	case "log-file":
+		config.LogFile = logFile
 	case "watch":
 		config.Watch = watch
 	case "app-id":

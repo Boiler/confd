@@ -14,7 +14,6 @@ import (
 	"time"
 
 	log "github.com/Sirupsen/logrus"
-	logfile "github.com/lomik/zapwriter"
 )
 
 type ConfdFormatter struct {
@@ -37,10 +36,9 @@ func init() {
 
 // SetFilepath sets log filepath
 func SetFilepath(path string) {
-	// https://github.com/lomik/zapwriter/blob/master/file.go
-	f, err := logfile.File(path)
+	f, err := File(path)
 	if err != nil {
-		Fatal("log SetFilepath error")
+		Fatal("log-file error:", err)
 	}
 	log.SetOutput(f)
 }
